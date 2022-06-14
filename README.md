@@ -41,4 +41,4 @@ Go to https://docs.microsoft.com/en-us/sql/samples/adventureworks-install-config
 
 Download AdventureWorks2019.bak file and follow the steps described in that document.
 
-
+Next: **[Create Synapse Instance](documentation/Create_Synapse_Instance.md)**<br>
