@@ -1,0 +1,916 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "synapse-instance-adventureworks2019-demo"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"synapse-instance-adventureworks2019-demo-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'synapse-instance-adventureworks2019-demo-WorkspaceDefaultSqlServer'"
+		},
+		"synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakeadworks2019demo.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/Copy_SQLDB_DL')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Copy from SQL Database to Data Lake",
+				"activities": [
+					{
+						"name": "ForEach_0nb",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.cw_items",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy_0nb",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"enableSkipIncompatibleRow": false,
+										"validateDataConsistency": false
+									},
+									"inputs": [
+										{
+											"referenceName": "SourceDataset_0nb",
+											"type": "DatasetReference",
+											"parameters": {
+												"cw_schema": "@item().source.schema",
+												"cw_table": "@item().source.table"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DestinationDataset_0nb",
+											"type": "DatasetReference",
+											"parameters": {
+												"cw_fileName": "@item().destination.fileName"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"cw_items": {
+						"type": "Array",
+						"defaultValue": [
+							{
+								"source": {
+									"schema": "dbo",
+									"table": "AWBuildVersion"
+								},
+								"destination": {
+									"fileName": "dboAWBuildVersion.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "dbo",
+									"table": "DatabaseLog"
+								},
+								"destination": {
+									"fileName": "dboDatabaseLog.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "dbo",
+									"table": "ErrorLog"
+								},
+								"destination": {
+									"fileName": "dboErrorLog.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "Department"
+								},
+								"destination": {
+									"fileName": "HumanResourcesDepartment.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "Employee"
+								},
+								"destination": {
+									"fileName": "HumanResourcesEmployee.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "EmployeeDepartmentHistory"
+								},
+								"destination": {
+									"fileName": "HumanResourcesEmployeeDepartmentHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "EmployeePayHistory"
+								},
+								"destination": {
+									"fileName": "HumanResourcesEmployeePayHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "JobCandidate"
+								},
+								"destination": {
+									"fileName": "HumanResourcesJobCandidate.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "HumanResources",
+									"table": "Shift"
+								},
+								"destination": {
+									"fileName": "HumanResourcesShift.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "Address"
+								},
+								"destination": {
+									"fileName": "PersonAddress.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "AddressType"
+								},
+								"destination": {
+									"fileName": "PersonAddressType.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "BusinessEntity"
+								},
+								"destination": {
+									"fileName": "PersonBusinessEntity.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "BusinessEntityAddress"
+								},
+								"destination": {
+									"fileName": "PersonBusinessEntityAddress.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "BusinessEntityContact"
+								},
+								"destination": {
+									"fileName": "PersonBusinessEntityContact.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "ContactType"
+								},
+								"destination": {
+									"fileName": "PersonContactType.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "CountryRegion"
+								},
+								"destination": {
+									"fileName": "PersonCountryRegion.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "EmailAddress"
+								},
+								"destination": {
+									"fileName": "PersonEmailAddress.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "Password"
+								},
+								"destination": {
+									"fileName": "PersonPassword.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "Person"
+								},
+								"destination": {
+									"fileName": "PersonPerson.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "PersonPhone"
+								},
+								"destination": {
+									"fileName": "PersonPersonPhone.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "PhoneNumberType"
+								},
+								"destination": {
+									"fileName": "PersonPhoneNumberType.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Person",
+									"table": "StateProvince"
+								},
+								"destination": {
+									"fileName": "PersonStateProvince.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "BillOfMaterials"
+								},
+								"destination": {
+									"fileName": "ProductionBillOfMaterials.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "Culture"
+								},
+								"destination": {
+									"fileName": "ProductionCulture.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "Document"
+								},
+								"destination": {
+									"fileName": "ProductionDocument.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "Illustration"
+								},
+								"destination": {
+									"fileName": "ProductionIllustration.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "Location"
+								},
+								"destination": {
+									"fileName": "ProductionLocation.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "Product"
+								},
+								"destination": {
+									"fileName": "ProductionProduct.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductCategory"
+								},
+								"destination": {
+									"fileName": "ProductionProductCategory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductCostHistory"
+								},
+								"destination": {
+									"fileName": "ProductionProductCostHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductDescription"
+								},
+								"destination": {
+									"fileName": "ProductionProductDescription.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductDocument"
+								},
+								"destination": {
+									"fileName": "ProductionProductDocument.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductInventory"
+								},
+								"destination": {
+									"fileName": "ProductionProductInventory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductListPriceHistory"
+								},
+								"destination": {
+									"fileName": "ProductionProductListPriceHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductModel"
+								},
+								"destination": {
+									"fileName": "ProductionProductModel.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductModelIllustration"
+								},
+								"destination": {
+									"fileName": "ProductionProductModelIllustration.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductModelProductDescriptionCulture"
+								},
+								"destination": {
+									"fileName": "ProductionProductModelProductDescriptionCulture.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductPhoto"
+								},
+								"destination": {
+									"fileName": "ProductionProductPhoto.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductProductPhoto"
+								},
+								"destination": {
+									"fileName": "ProductionProductProductPhoto.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductReview"
+								},
+								"destination": {
+									"fileName": "ProductionProductReview.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ProductSubcategory"
+								},
+								"destination": {
+									"fileName": "ProductionProductSubcategory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "ScrapReason"
+								},
+								"destination": {
+									"fileName": "ProductionScrapReason.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "TransactionHistory"
+								},
+								"destination": {
+									"fileName": "ProductionTransactionHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "TransactionHistoryArchive"
+								},
+								"destination": {
+									"fileName": "ProductionTransactionHistoryArchive.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "UnitMeasure"
+								},
+								"destination": {
+									"fileName": "ProductionUnitMeasure.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "WorkOrder"
+								},
+								"destination": {
+									"fileName": "ProductionWorkOrder.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Production",
+									"table": "WorkOrderRouting"
+								},
+								"destination": {
+									"fileName": "ProductionWorkOrderRouting.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Purchasing",
+									"table": "ProductVendor"
+								},
+								"destination": {
+									"fileName": "PurchasingProductVendor.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Purchasing",
+									"table": "PurchaseOrderDetail"
+								},
+								"destination": {
+									"fileName": "PurchasingPurchaseOrderDetail.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Purchasing",
+									"table": "PurchaseOrderHeader"
+								},
+								"destination": {
+									"fileName": "PurchasingPurchaseOrderHeader.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Purchasing",
+									"table": "ShipMethod"
+								},
+								"destination": {
+									"fileName": "PurchasingShipMethod.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Purchasing",
+									"table": "Vendor"
+								},
+								"destination": {
+									"fileName": "PurchasingVendor.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "CountryRegionCurrency"
+								},
+								"destination": {
+									"fileName": "SalesCountryRegionCurrency.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "CreditCard"
+								},
+								"destination": {
+									"fileName": "SalesCreditCard.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "Currency"
+								},
+								"destination": {
+									"fileName": "SalesCurrency.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "CurrencyRate"
+								},
+								"destination": {
+									"fileName": "SalesCurrencyRate.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "Customer"
+								},
+								"destination": {
+									"fileName": "SalesCustomer.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "PersonCreditCard"
+								},
+								"destination": {
+									"fileName": "SalesPersonCreditCard.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesOrderDetail"
+								},
+								"destination": {
+									"fileName": "SalesSalesOrderDetail.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesOrderHeader"
+								},
+								"destination": {
+									"fileName": "SalesSalesOrderHeader.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesOrderHeaderSalesReason"
+								},
+								"destination": {
+									"fileName": "SalesSalesOrderHeaderSalesReason.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesPerson"
+								},
+								"destination": {
+									"fileName": "SalesSalesPerson.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesPersonQuotaHistory"
+								},
+								"destination": {
+									"fileName": "SalesSalesPersonQuotaHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesReason"
+								},
+								"destination": {
+									"fileName": "SalesSalesReason.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesTaxRate"
+								},
+								"destination": {
+									"fileName": "SalesSalesTaxRate.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesTerritory"
+								},
+								"destination": {
+									"fileName": "SalesSalesTerritory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SalesTerritoryHistory"
+								},
+								"destination": {
+									"fileName": "SalesSalesTerritoryHistory.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "ShoppingCartItem"
+								},
+								"destination": {
+									"fileName": "SalesShoppingCartItem.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SpecialOffer"
+								},
+								"destination": {
+									"fileName": "SalesSpecialOffer.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "SpecialOfferProduct"
+								},
+								"destination": {
+									"fileName": "SalesSpecialOfferProduct.parquet"
+								}
+							},
+							{
+								"source": {
+									"schema": "Sales",
+									"table": "Store"
+								},
+								"destination": {
+									"fileName": "SalesStore.parquet"
+								}
+							}
+						]
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/SourceDataset_0nb')]",
+				"[concat(variables('workspaceId'), '/datasets/DestinationDataset_0nb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DestinationDataset_0nb')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_fileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().cw_fileName",
+							"type": "Expression"
+						},
+						"fileSystem": "adventureworks2019"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SourceDataset_0nb')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_schema": {
+						"type": "String"
+					},
+					"cw_table": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().cw_schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().cw_table",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/synapse-instance-adventureworks2019-demo-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('synapse-instance-adventureworks2019-demo-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		}
+	]
+}

@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "synapse-instance-adventureworks2019-demo"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"synapse-instance-adventureworks2019-demo-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://datalakeadworks2019demo.dfs.core.windows.net"
+		}
+	}
+}
