@@ -8,6 +8,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 **[Create Synapse Workspace](#create-synapse-workspace)**<br>
 **[Connect Synapse to GitHub](#connect-synapse-to-github)**<br>
 **[Ingest AdventureWorks2019 into Data Lake](Ingest_To_DataLake.md#ingest-adventureworks2019-into-data-lake)**<br>
+**[Create Synapse Notebook](Synapse_Notebook.md#create-synapse-notebook)**<br>
 
 ## Create Synapse Workspace
 

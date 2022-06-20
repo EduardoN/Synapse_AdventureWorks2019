@@ -6,6 +6,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 ### Table of Contents
 
 **[Ingest AdventureWorks2019 into Data Lake](#ingest-adventureworks2019-into-data-lake)**<br>
+**[Create Synapse Notebook](Synapse_Notebook.md#create-synapse-notebook)**<br>
 
 ## Ingest AdventureWorks2019 into Data Lake
 
@@ -91,3 +92,4 @@ To see the generated files, on the left click on Data, on the Data page click on
 
 Done.
 
+Next: **[Create Synapse Notebook](Synapse_Notebook.md#create-synapse-notebook)**<br>
