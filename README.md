@@ -7,7 +7,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 
 **[AdventureWorks2019 Database](#adventureworks2019-database)**<br>
 **[Download AdventureWorks sample database](#download-adventureworks-sample-database)**<br>
-**[Create Synapse Workspace](documentation/Create_Synapse_Workspace.md)**<br>
+**[Create Synapse Workspace](documentation/Create_Synapse_Workspace.md#create-synapse-workspace)**<br>
 **[Connect Synapse to GitHub](documentation/Create_Synapse_Workspace.md#connect-synapse-to-github)**<br>
 **[Ingest AdventureWorks2019 into Data Lake](documentation/Ingest_To_DataLake.md)**<br>
 
@@ -43,4 +43,4 @@ Go to https://docs.microsoft.com/en-us/sql/samples/adventureworks-install-config
 
 Download AdventureWorks2019.bak file and follow the steps described in that document.
 
-Next: **[Create Synapse Workspace](documentation/Create_Synapse_Workspace.md)**<br>
+Next: **[Create Synapse Workspace](documentation/Create_Synapse_Workspace.md#create-synapse-workspace)**<br>
