@@ -1,0 +1,28 @@
+{
+	"name": "DestinationDataset_b2x",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_fileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().cw_fileName",
+					"type": "Expression"
+				},
+				"fileSystem": "adventureworks2019"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
