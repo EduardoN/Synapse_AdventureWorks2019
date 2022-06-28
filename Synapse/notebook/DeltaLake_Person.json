@@ -1,0 +1,66 @@
+{
+	"name": "DeltaLake_Person",
+	"properties": {
+		"description": "Generating Person model",
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "adworks2019pool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "162d526c-4418-430b-8faf-6c9603bba305"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/808da420-460f-4c28-ac83-51c450872744/resourceGroups/synapse_adventureworks2019_rg/providers/Microsoft.Synapse/workspaces/synapse-instance-adventureworks2019-demo/bigDataPools/adworks2019pool",
+				"name": "adworks2019pool",
+				"type": "Spark",
+				"endpoint": "https://synapse-instance-adventureworks2019-demo.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/adworks2019pool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"#Set up file paths\r\n",
+					"personEmailRawPath = \"abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/PersonEmailAddress.parquet\"\r\n",
+					"personRawPath = \"abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/PersonPerson.parquet\"\r\n",
+					"personBronzeTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/personBronzeTable'\r\n",
+					"personSilverTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/personSilverTable'\r\n",
+					"personGoldTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/personGoldTable'"
+				],
+				"execution_count": 1
+			}
+		]
+	}
+}
