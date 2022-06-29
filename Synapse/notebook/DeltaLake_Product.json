@@ -1,0 +1,244 @@
+{
+	"name": "DeltaLake_Product",
+	"properties": {
+		"description": "Generating Product model",
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "adworks2019pool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "b7f8d10a-13db-4f7e-8d9a-0af8d9d279cb"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/808da420-460f-4c28-ac83-51c450872744/resourceGroups/synapse_adventureworks2019_rg/providers/Microsoft.Synapse/workspaces/synapse-instance-adventureworks2019-demo/bigDataPools/adworks2019pool",
+				"name": "adworks2019pool",
+				"type": "Spark",
+				"endpoint": "https://synapse-instance-adventureworks2019-demo.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/adworks2019pool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"#Set up file paths\r\n",
+					"productRawPath = \"abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/ProductionProduct.parquet\"\r\n",
+					"productBronzeTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productBronzeTable'\r\n",
+					"productSilverTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productSilverTable'\r\n",
+					"productGoldTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productGoldTable'"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"df = spark.read.load(productRawPath, format='parquet')\r\n",
+					"display(df.limit(10))"
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Save as Delta Table\r\n",
+					"df.write.mode(\"overwrite\").format(\"delta\").save(productBronzeTablePath)"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Load Bronze table into dataframe\r\n",
+					"rawProductDF = spark.read.format(\"delta\").load(productBronzeTablePath)\r\n",
+					"rawProductDF.show()"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Drop id field\r\n",
+					"productDF2 = rawProductDF.drop('rowguid').drop('ModifiedDate')\r\n",
+					"productDF2.show()"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Save Silver table\r\n",
+					"productDF2.write.mode(\"overwrite\").format(\"delta\").option(\"overwriteSchema\", \"true\").save(productSilverTablePath)"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Filtering out null values\r\n",
+					"productDF3 = productDF2.filter(productDF2.Color != 'null').filter(productDF2.Size != 'null').filter(productDF2.Class != 'null')\r\n",
+					"productDF3.show()"
+				],
+				"execution_count": 17
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Update Silver Table\r\n",
+					"productDF3.write.mode(\"overwrite\").format(\"delta\").option(\"overwriteSchema\", \"true\").save(productSilverTablePath)"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"productDF4 = productDF3.groupBy(\"Color\", \"ProductLine\").count().sort(\"Color\")\r\n",
+					"productDF4.show(1000)"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Save Gold table\r\n",
+					"productDF4.write.mode(\"overwrite\").save(productGoldTablePath)"
+				],
+				"execution_count": 20
+			}
+		]
+	}
+}
