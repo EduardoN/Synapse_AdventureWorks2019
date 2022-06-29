@@ -7,6 +7,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 
 **[Create Synapse Notebook](#create-synapse-notebook)**<br>
 **[Create Persons Notebook](#create-person-notebook)**<br>
+**[Create Product Notebook](#create-product-notebook)**<br>
 
 ## Create Synapse Notebook
 
@@ -171,5 +172,118 @@ Once the pull request is created, merge it and delete the branch. You are all se
 
 Go back to the browser tab where you have Synpase Studio, expand the source control dropdown and select main branch. The dropdown will refresh and the deleted branch will dissapear, and now you are in the main branch with the newly created notebook.
 
+## Create Product Notebook
 
+Lets create a new branch.
+
+In the Develop tab expand the source control dropdown that has the main branch selected. 
+
+Click on New branch. Name the new branch. I will call it "eduardo_productNotebook" and click Create.
+
+![Product Notebook](./../images/ProductNotebook.png)
+
+On the Notebooks section, expand the Notebooks Actions by clicking the ... and click on New notebook.
+
+On the Properties window, set the name of the notebook, I will call it DeltaLake_Product. Set a Description and click on the Properties icon above that window to dismiss it.
+
+![Product Notebook](./../images/ProductNotebookI.png)
+
+Lets start writing code. Write the following code in the first cell. Attach to the existing pool and click on the Run All button.
+
+```python
+#Set up file paths
+productRawPath = "abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/ProductionProduct.parquet"
+productBronzeTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productBronzeTable'
+productSilverTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productSilverTable'
+productGoldTablePath = 'abfss://adventureworks2019@datalakeadworks2019demo.dfs.core.windows.net/delta/productGoldTable'
+```
+
+![Product Notebook](./../images/ProductNotebookII.png)
+
+Click the + Code to add another cell, write this code to read the ProductionProduct.parquet file and display tis data. Run the cell.
+
+```python
+%%pyspark
+df = spark.read.load(productRawPath, format='parquet')
+display(df.limit(10))
+```
+
+Create a new cell to save the Bronze table. Write this code and run the cell.
+
+```Python
+#Save as Delta Table
+df.write.mode("overwrite").format("delta").save(productBronzeTablePath)
+```
+
+Next read the bronze table and display its data.
+
+```Python
+#Load Bronze table into dataframe
+rawProductDF = spark.read.format("delta").load(productBronzeTablePath)
+rawProductDF.show()
+```
+
+Lets transform the data. Lets drop the fields rowguid and ModifiedDate. Create a new cell, write this code and run the cell.
+
+```Python
+#Drop id field and ModifiedDate
+productDF2 = rawProductDF.drop('rowguid').drop('ModifiedDate')
+productDF2.show()
+```
+
+Lets save this dataframe as the silver table. Create a new cell, write this code and run the cell.
+
+```Python
+#Save Silver table
+productDF2.write.mode("overwrite").format("delta").option("overwriteSchema", "true").save(productSilverTablePath)
+```
+
+Lets filter out null values in a new cell. 
+
+```Python
+#Filtering out null values
+productDF3 = productDF2.filter(productDF2.Color != 'null').filter(productDF2.Size != 'null').filter(productDF2.Class != 'null')
+productDF3.show()
+```
+
+In a new cell, update the silver table.
+
+```Python
+#Update Silver Table
+productDF3.write.mode("overwrite").format("delta").option("overwriteSchema", "true").save(productSilverTablePath)
+```
+
+In a new cell, generate a new model by grouping by Color and ProductLine and sort the result by Color. Run the cell
+
+```Python
+productDF4 = productDF3.groupBy("Color", "ProductLine").count().sort("Color")
+productDF4.show(1000)
+```
+
+And finally, save the gold table in the last cell. Run it.
+
+```Python
+#Save Gold table
+productDF4.write.mode("overwrite").save(productGoldTablePath)
+```
+
+Try the whole notebook by clicking the Run All button at the top. Once the execution completes successfully, click the Commit button to get the notebook commited.
+
+![Product Notebook](./../images/ProductNotebookIII.png)
+
+Lets merge this new notebook into the main branch. Expand the source control dropdown and click Create pull request. 
+
+![Product Notebook](./../images/ProductNotebookIV.png)
+
+This will open a new browser tab and takes you to GitHub for you to create the pull request. Click on the Create pull request button in GitHub. Once the pull request is created, click the Merge pull request button and confirm the merge.
+
+Once done, delete the branch.
+
+Go back to the previous browser tab where you have Synapse Studio, and in the source control dropdown select Main branch. That will refresh the dropdown removing the deleted branch from it, and will show the newly created notebook in the Main branch.
+
+As a result of running that notebook, if you go to the Data tab, click Linked, expand Azure Data Lake Storage Gen2, expand the primary storage account, click on adventureworks2019 and on the folder list double click on delta and productGoldTable, you will see the parquet files with the newly created model.
+
+![Product Notebook](./../images/ProductNotebookV.png)
+
+The models are created. In the next step lets ingest them into Azure dedicated SQL pool.
 
