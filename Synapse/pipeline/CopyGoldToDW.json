@@ -24,11 +24,21 @@
 							"enablePartitionDiscovery": false
 						}
 					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"allowCopyCommand": true
+					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "SourceDataset_person",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationSqlPool_person",
 						"type": "DatasetReference"
 					}
 				]
