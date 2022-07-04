@@ -21,7 +21,6 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "personGoldTable",
 							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
@@ -35,7 +34,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_delta",
+						"referenceName": "SourceDataset_person",
 						"type": "DatasetReference"
 					}
 				],

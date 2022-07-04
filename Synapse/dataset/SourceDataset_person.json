@@ -1,0 +1,33 @@
+{
+	"name": "SourceDataset_person",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "delta/personGoldTable",
+				"fileSystem": "adventureworks2019"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "PersonType",
+				"type": "UTF8"
+			},
+			{
+				"name": "EmailPromotion",
+				"type": "INT32"
+			},
+			{
+				"name": "count",
+				"type": "INT64"
+			}
+		]
+	}
+}
