@@ -1,0 +1,33 @@
+{
+	"name": "SourceDataset_product",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapse-instance-adventureworks2019-demo-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "delta/productGoldTable",
+				"fileSystem": "adventureworks2019"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Color",
+				"type": "UTF8"
+			},
+			{
+				"name": "ProductLine",
+				"type": "UTF8"
+			},
+			{
+				"name": "count",
+				"type": "INT64"
+			}
+		]
+	}
+}

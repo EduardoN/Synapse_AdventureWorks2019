@@ -1,0 +1,16 @@
+{
+	"name": "DestinationSqlPool_product",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Model",
+			"table": "ProductByColor"
+		},
+		"sqlPool": {
+			"referenceName": "aw2019_demo_synapse_sql_pool",
+			"type": "SqlPoolReference"
+		}
+	}
+}
