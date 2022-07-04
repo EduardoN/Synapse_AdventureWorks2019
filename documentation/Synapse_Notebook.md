@@ -8,6 +8,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 **[Create Synapse Notebook](#create-synapse-notebook)**<br>
 **[Create Persons Notebook](#create-person-notebook)**<br>
 **[Create Product Notebook](#create-product-notebook)**<br>
+**[Ingest Models into dedicated SQL pool](Ingest_To_DW.md#ingest-model-into-dedicated-sql-pool)**<br>
 
 ## Create Synapse Notebook
 
@@ -287,3 +288,4 @@ As a result of running that notebook, if you go to the Data tab, click Linked, e
 
 The models are created. In the next step lets ingest them into Azure dedicated SQL pool.
 
+Next: **[Create a dedicated SQL pool](Ingest_To_DW.md#create-a-dedicated-sql-pool)**<br>
