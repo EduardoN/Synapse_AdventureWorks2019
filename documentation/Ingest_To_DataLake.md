@@ -11,7 +11,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 
 ## Ingest AdventureWorks2019 into Data Lake
 
-Lets start by ingesting AdventureWorks2019 database into Data Lake.
+Let's start by ingesting AdventureWorks2019 database into Data Lake.
 
 Click on the Home tab in Synapse Studio, and then click on the Ingest option to trigger the Copy Data tool.
 
@@ -49,9 +49,9 @@ On the Destination data store, search for data lake and select Azure Data Lake S
 
 ![Ingest Database](./../images/IngestDatabaseVI.png)
 
-In the connection dropdown select the already existing connection to Synapse integrated Data Lake. That will show you some aditional options.
+In the connection dropdown select the already existing connection to Synapse integrated Data Lake. That will show you some additional options.
 
-As folder name enter adventureworks2019. As file name siffix enter .parquet, and then click Next.
+As folder name enter adventureworks2019. As file name suffix enter .parquet, and then click Next.
 
 ![Ingest Database](./../images/IngestDatabaseVII.png)
 
@@ -63,7 +63,7 @@ In the Settings page enter a name for the task and a description and click Next.
 
 ![Ingest Database](./../images/IngestDatabaseIX.png)
 
-The Copy Data tool shows you a Symmary page, click the Next button.
+The Copy Data tool shows you a Summary page, click the Next button.
 
 ![Ingest Database](./../images/IngestDatabaseX.png)
 
@@ -79,7 +79,7 @@ Click the Publish button at the top, wait for it to generate all the pending cha
 
 ![Ingest Database](./../images/IngestDatabaseXIII.png)
 
-Wait until you get the notification that the publishing completed and the templates were generated.
+Wait until you get the notification that the publishing completed, and the templates were generated.
 
 Trigger the pipelines by clicking the Add trigger button and selecting Trigger now. On the Pipeline run window click OK.
 
@@ -87,7 +87,7 @@ The pipeline will trigger. To monitor the progress, click on the Monitor option 
 
 ![Ingest Database](./../images/IngestDatabaseXIV.png)
 
-To see the generated files, on the left click on Data, on the Data page click on Linked. Expand Azure Data Lake Storage Gen 2, expland the Data Lake instance (in this demo we called it synapse-instance-adventureWorks2019-demo), click on the adventireworks2019 folder, and there you will see the three generated parquet files.
+To see the generated files, on the left click on Data, on the Data page click on Linked. Expand Azure Data Lake Storage Gen 2, expand the Data Lake instance (in this demo we called it synapse-instance-adventureWorks2019-demo), click on the adventireworks2019 folder, and there you will see the three generated parquet files.
 
 ![Ingest Database](./../images/IngestDatabaseXV.png)
 

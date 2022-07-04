@@ -13,11 +13,11 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 
 ## Create Synapse Workspace
 
-Let's create an Workspace of Synapse.
+Let's create a Workspace of Synapse.
 
 Search for Synapse in the search box on the top of the Azure portal and click on Azure Synapse Analytics.
 
-In the Azure Synase Analytics page, click the Create button.
+In the Azure Synapse Analytics page, click the Create button.
 
 ![Create Synapse](./../images/CreateSynapse.png)
 
@@ -37,17 +37,17 @@ Once the Validation succeeds, click the Create button and wait until the deploym
 
 Search for Synapse in the search box on the top of the Azure portal and click on Azure Synapse Analytics.
 
-In the Azure Synapse Analytics page you will see the Workspace you just created. Click on it and then click on Open Synapse Studio.
+In the Azure Synapse Analytics page, you will see the Workspace you just created. Click on it and then click on Open Synapse Studio.
 
 ![Connect To GitHub](./../images/ConnectToGitHub.png)
 
-Once on Synapse Studio, lets set up a code repository.
+Once on Synapse Studio, let's set up a code repository.
 
 Click on the Data tab on the left. on the Data page expand the dropdown Synapse live on the top and click on Set up code repository.
 
 ![Connect To GitHub](./../images/ConnectToGitHubI.png)
 
-The Configure a repository panel opens on the left. Select the repository type. I am connecting this workspace to this very GitHub repo. If you select GitHub then enter the repository owner anc click Continue at the bottom.
+The Configure a repository panel opens on the left. Select the repository type. I am connecting this workspace to this very GitHub repo. If you select GitHub then enter the repository owner and click Continue at the bottom.
 
 ![Connect To GitHub](./../images/ConnectToGitHubII.png)
 
