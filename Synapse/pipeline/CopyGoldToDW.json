@@ -21,6 +21,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "personGoldTable",
 							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
@@ -34,7 +35,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_person",
+						"referenceName": "SourceDataset_delta",
 						"type": "DatasetReference"
 					}
 				],
@@ -44,29 +45,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "Copy product",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Copy person",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"enableStaging": false
-				}
 			}
 		],
 		"annotations": []
