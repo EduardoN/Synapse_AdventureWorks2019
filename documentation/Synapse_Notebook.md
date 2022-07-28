@@ -9,6 +9,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 **[Create Persons Notebook](#create-person-notebook)**<br>
 **[Create Product Notebook](#create-product-notebook)**<br>
 **[Ingest Models into dedicated SQL pool](Ingest_To_DW.md#ingest-model-into-dedicated-sql-pool)**<br>
+**[Create PowerBI Report](PowerBI_Report.md#create-powerbi-report)**<br>
 
 ## Create Synapse Notebook
 

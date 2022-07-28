@@ -7,6 +7,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 
 **[Create a dedicated SQL pool](#create-a-dedicated-sql-pool)**<br>
 **[Ingest Models into dedicated SQL pool](#ingest-model-into-dedicated-sql-pool)**<br>
+**[Create PowerBI Report](PowerBI_Report.md#create-powerbi-report)**<br>
 
 ## Create a dedicated SQL pool
 
@@ -121,3 +122,5 @@ Finally, let's trigger the pipeline. To do that click the Publish button on the 
 On the Monitor tab, on Pipeline runs under Integration you will see the pipeline execution.
 
 ![Ingest to SQL](./../images/IngestToSQLXIV.png)
+
+Next: **[Create PowerBI Report](PowerBI_Report.md#create-powerbi-report)**<br>

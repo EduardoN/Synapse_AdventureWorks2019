@@ -8,6 +8,7 @@ In this repo we demonstrate some Azure Synapse Analytics functionality using Adv
 **[Ingest AdventureWorks2019 into Data Lake](#ingest-adventureworks2019-into-data-lake)**<br>
 **[Create Synapse Notebook](Synapse_Notebook.md#create-synapse-notebook)**<br>
 **[Create a dedicated SQL pool](Ingest_To_DW.md#create-a-dedicated-sql-pool)**<br>
+**[Create PowerBI Report](PowerBI_Report.md#create-powerbi-report)**<br>
 
 ## Ingest AdventureWorks2019 into Data Lake
 
