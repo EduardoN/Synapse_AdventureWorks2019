@@ -1,0 +1,11 @@
+{
+	"name": "AdventureWorksPowerBIWorkspace",
+	"properties": {
+		"annotations": [],
+		"type": "PowerBIWorkspace",
+		"typeProperties": {
+			"workspaceID": "14cba474-3268-475a-a3a1-e50104028af5",
+			"tenantID": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		}
+	}
+}
