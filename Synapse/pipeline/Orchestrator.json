@@ -1,0 +1,21 @@
+{
+	"name": "Orchestrator",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute SQL to DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Copy_SQLDB_DL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}
